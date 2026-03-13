@@ -1,11 +1,11 @@
+import os
 from flask import Flask, request, redirect, render_template_string
 
 app = Flask(__name__)
 
-# 千葉工大の出席システムのベースURL（これがあればROOM_DATAはいらない！）
+# 千葉工大の出席システムのベースURL
 BASE_URL = "https://attendance.is.it-chiba.ac.jp/attendance/class_room/"
 
-# スマホで「アプリ」に見えるデザイン（ボタンを大きく、入力を数字専用に）
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ja">
@@ -19,8 +19,6 @@ HTML_TEMPLATE = """
         h2 { color: #333; margin-bottom: 20px; font-size: 1.2rem; }
         input { width: 100%; padding: 15px; font-size: 24px; border: 2px solid #ddd; border-radius: 12px; box-sizing: border-box; text-align: center; margin-bottom: 20px; }
         button { width: 100%; padding: 15px; font-size: 18px; font-weight: bold; color: white; background: #007AFF; border: none; border-radius: 12px; cursor: pointer; }
-        button:active { background: #0056b3; }
-        .info { margin-top: 15px; font-size: 12px; color: #888; }
     </style>
 </head>
 <body>
@@ -30,7 +28,6 @@ HTML_TEMPLATE = """
             <input type="number" name="room" pattern="[0-9]*" inputmode="numeric" placeholder="例: 3212" required autofocus>
             <button type="submit">出席サイトを開く</button>
         </form>
-        <div class="info">千葉工業大学 3号館〜12号館対応</div>
     </div>
 </body>
 </html>
@@ -44,12 +41,10 @@ def index():
 def open_url():
     room = request.form.get('room')
     if room:
-        # 入力された部屋番号をURLの末尾にガッチャンコ！
         return redirect(f"{BASE_URL}{room}")
     return redirect('/')
 
 if __name__ == '__main__':
-    # Renderで動かすための設定
-    import os
+    # 念のためローカルでも動くように設定
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
