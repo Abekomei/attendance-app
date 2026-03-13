@@ -1,0 +1,14 @@
+name: Keep Alive Render App
+
+on:
+  schedule:
+    # 15分おきに実行（Renderのスリープを防止）
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # 手動で実行するためのボタン
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send a ping to the app
+        run: curl -I https://attendance-app-wzi2.onrender.com
